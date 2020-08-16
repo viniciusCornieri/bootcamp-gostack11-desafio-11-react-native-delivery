@@ -33,11 +33,15 @@ const Orders: React.FC = () => {
 
   useEffect(() => {
     async function loadOrders(): Promise<void> {
-      // Load orders from API
+      const response = await api.get('/orders');
+
+      if (response.status === 200) {
+        setOrders(response.data);
+      }
     }
 
     loadOrders();
-  }, []);
+  }, [setOrders]);
 
   return (
     <Container>

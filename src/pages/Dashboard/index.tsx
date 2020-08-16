@@ -52,14 +52,14 @@ const Dashboard: React.FC = () => {
   const navigation = useNavigation();
 
   async function handleNavigate(id: number): Promise<void> {
-    // Navigate do ProductDetails page
+    navigation.navigate(`FoodDetails`, { id });
   }
 
   useEffect(() => {
     async function loadFoods(): Promise<void> {
       const response = await api.get('/foods', {
         params: {
-          category: selectedCategory,
+          category_like: selectedCategory,
           name_like: searchValue,
         },
       });
