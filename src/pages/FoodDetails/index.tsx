@@ -73,11 +73,33 @@ const FoodDetails: React.FC = () => {
 
   useEffect(() => {
     async function loadFood(): Promise<void> {
-      // Load a specific food with extras based on routeParams id
+      try {
+        const response = await api.get(`/foods/${routeParams.id}`);
+        setFood(response.data);
+      } catch (err) {
+        // eslint-disable-next-line no-console
+        console.error(
+          `Problem when trying to get food with id ${routeParams.id}`,
+          err,
+        );
+      }
     }
 
     loadFood();
-  }, [routeParams]);
+  }, [routeParams.id, setFood]);
+
+  useEffect(() => {
+    async function loadFavorite(): Promise<void> {
+      try {
+        await api.get(`/favorites/${routeParams.id}`);
+        setIsFavorite(true);
+      } catch (err) {
+        setIsFavorite(false);
+      }
+    }
+
+    loadFavorite();
+  }, [routeParams.id, setIsFavorite]);
 
   function handleIncrementExtra(id: number): void {
     // Increment extra quantity
@@ -96,11 +118,35 @@ const FoodDetails: React.FC = () => {
   }
 
   const toggleFavorite = useCallback(() => {
-    // Toggle if food is favorite or not
+    async function saveFavorite(): Promise<void> {
+      try {
+        await api.post(`/favorites`, food);
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    async function deleteFavorite(): Promise<void> {
+      try {
+        await api.delete(`/favorites/${food.id}`);
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    const updatedFavorite = !isFavorite;
+
+    setIsFavorite(updatedFavorite);
+
+    if (updatedFavorite) {
+      saveFavorite();
+    } else {
+      deleteFavorite();
+    }
   }, [isFavorite, food]);
 
   const cartTotal = useMemo(() => {
-    // Calculate cartTotal
+    return 0;
   }, [extras, food, foodQuantity]);
 
   async function handleFinishOrder(): Promise<void> {
