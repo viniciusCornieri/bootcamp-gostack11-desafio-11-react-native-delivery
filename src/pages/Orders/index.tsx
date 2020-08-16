@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Image } from 'react-native';
+import Icon from 'react-native-vector-icons/Feather';
 
 import api from '../../services/api';
 import formatValue from '../../utils/formatValue';
@@ -41,6 +42,7 @@ const Orders: React.FC = () => {
   return (
     <Container>
       <Header>
+        <Icon size={25} name="shopping-bag" color="#fff" />
         <HeaderTitle>Meus pedidos</HeaderTitle>
       </Header>
 
